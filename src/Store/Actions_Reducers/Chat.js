@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { setDriver } from "mongoose";
 
 const sendmessage = createSlice({
   name: "sendmessage",

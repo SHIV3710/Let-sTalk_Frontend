@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  addmessagetoconv,
-  currconv,
-  currconverror,
-} from "../Store/Actions_Reducers/Chat";
+import { currconv, currconverror } from "../Store/Actions_Reducers/Chat";
 
 export const getconversation = (id) => async (dispatch) => {
   try {
