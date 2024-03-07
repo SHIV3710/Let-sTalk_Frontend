@@ -10,7 +10,7 @@ const sendmessage = createSlice({
   reducers: {
     addmessagetoconv: (state, action) => {
       state.load = true;
-      state.conversations.push(action.payload);
+      state.conversations = [...state.conversations, action.payload];
     },
     currconv: (state, action) => {
       state.load = false;
@@ -34,6 +34,7 @@ export const Conversation = sendmessage.reducer;
 const socket = createSlice({
   name: "socket",
   initialState: {
+    loading: false,
     socket: null,
     onlineusers: [],
   },

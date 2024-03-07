@@ -1,38 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { IoSearchSharp } from "react-icons/io5";
 import { alluser } from "../Actions/User";
-import { getalluser } from "../Store/Actions_Reducers/User";
+import { getgroups } from "../Actions/Chat";
 
 export const Search = () => {
-  const [search, setsearch] = useState("");
   const dispatch = useDispatch();
   const { mode } = useSelector((state) => state.mode);
-  const { users } = useSelector((state) => state.AllUser);
-  const handleusers = () => {
-    const searchedUser = users.filter(
-      (user) => user.name.toLowerCase() === search.toLowerCase()
-    );
-    dispatch(searchedUser.length === 0 ? alluser() : getalluser(searchedUser));
-  };
-  useEffect(() => {
-    if (search === "") {
-      handleusers();
-    }
-  }, [search]);
+  const { value } = useSelector((state) => state.AllUser);
   return (
     <Main>
       <input
         type="text"
         placeholder="Search in dashboard..."
-        onChange={(e) => setsearch(e.target.value)}
+        onChange={(e) => {
+          if (value) {
+            dispatch(alluser(e.target.value));
+          } else {
+            dispatch(getgroups(e.target.value));
+          }
+        }}
         style={{
-          background: mode ? "rgba(47, 47, 50, 1)" : "rgba(242, 240, 240, 0.8)",
+          background: !mode ? "rgb(255, 255, 255)" : "rgb(29,31,43)",
           color: mode ? "white" : "rgba(47, 47, 50, 1)",
         }}
       />
-      <IoSearchSharp onClick={handleusers} />
+      <IoSearchSharp />
     </Main>
   );
 };
@@ -40,32 +34,40 @@ export const Search = () => {
 const Main = styled.div`
   height: 5vh;
   width: 18vw;
-  border-radius: 0.4rem;
+  z-index: 888;
+  border: 1px solid #c0c0c0;
+  border-radius: 1rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
   @media screen and (max-width: 1000px) {
-    width: 100vw;
-    justify-content: center;
+    width: 70vw;
+    justify-content: space-between;
+    padding: 0vw 2vw;
     gap: 5vw;
   }
   svg {
     cursor: pointer;
     font-size: x-large;
+    color: rgb(97, 80, 248);
   }
   input {
     width: 14vw;
-    height: 5vh;
+    height: 4vh;
     border: none;
     font-family: "Poppins";
     font-size: x-small;
     text-indent: 0.5vw;
-    border-radius: 0.2rem;
+    border-radius: 1rem;
     &:focus {
       outline: none;
+      &::-webkit-input-placeholder {
+        color: #b8b8b8;
+        transition: 0.4 s;
+      }
     }
     @media screen and (max-width: 1000px) {
-      width: 70vw;
+      width: 60vw;
     }
   }
 `;

@@ -19,15 +19,25 @@ const usertotalk = createSlice({
   name: "usertotalk",
   initialState: {
     user: null,
+    group: null,
+    loading: false,
   },
   reducers: {
+    chatwithloading: (state, action) => {
+      state.loading = true;
+    },
     chatwith: (state, action) => {
       state.user = action.payload;
+      state.loading = false;
+    },
+    grouptalk: (state, action) => {
+      state.group = action.payload;
+      state.loading = false;
     },
   },
 });
 
-export const { chatwith } = usertotalk.actions;
+export const { chatwith, grouptalk, chatwithloading } = usertotalk.actions;
 export const Chatwith = usertotalk.reducer;
 
 const windowDimensions = createSlice({
@@ -50,16 +60,22 @@ export const windowDi = windowDimensions.reducer;
 const user = createSlice({
   name: "user",
   initialState: {
+    loading: false,
     auth: false,
     user: null,
     error: null,
   },
   reducers: {
+    loadinguser: (state, action) => {
+      state.loading = true;
+    },
     loginuser: (state, action) => {
+      state.loading = false;
       state.auth = true;
       state.user = action.payload;
     },
     loginuserError: (state, action) => {
+      state.loading = false;
       state.auth = false;
       state.error = action.payload;
     },
@@ -73,28 +89,79 @@ const user = createSlice({
   },
 });
 
-export const { loginuser, loginuserError, logoutuser, clearerror } =
-  user.actions;
+export const {
+  loginuser,
+  loginuserError,
+  logoutuser,
+  clearerror,
+  loadinguser,
+} = user.actions;
 export const User = user.reducer;
 
 const alluser = createSlice({
   name: "alluser",
   initialState: {
+    userloading: false,
+    grouploading: false,
     users: [],
     error: null,
+    groups: [],
+    value: 1,
+    create: false,
+    createloading: false,
   },
   reducers: {
+    creategrouploading: (state, action) => {
+      state.createloading = true;
+    },
+    creategroup: (state, action) => {
+      state.create = action.payload;
+      state.createloading = false;
+    },
+    creategroupfailure: (state, action) => {
+      state.createloading = false;
+    },
+    getuserloading: (state, action) => {
+      state.userloading = true;
+    },
+    getgrouploading: (state, action) => {
+      state.grouploading = true;
+    },
     getalluser: (state, action) => {
       state.users = action.payload;
+      state.userloading = false;
     },
     getallusererror: (state, action) => {
       state.error = action.payload;
+      state.users = [];
+      state.groups = [];
+      state.userloading = false;
     },
     clearerroralluser: (state, action) => {
       state.error = null;
+      state.value = 1;
+    },
+    getallgroups: (state, action) => {
+      state.groups = action.payload;
+      state.grouploading = false;
+    },
+    changevalue: (state, action) => {
+      state.value = action.payload;
+      state.grouploading = false;
+      state.create = false;
     },
   },
 });
 
-export const { getalluser, getallusererror } = alluser.actions;
+export const {
+  getalluser,
+  getallusererror,
+  getallgroups,
+  changevalue,
+  getuserloading,
+  getgrouploading,
+  creategroup,
+  creategroupfailure,
+  creategrouploading,
+} = alluser.actions;
 export const AllUser = alluser.reducer;

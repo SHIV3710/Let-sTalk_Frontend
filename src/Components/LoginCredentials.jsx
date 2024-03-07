@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, register } from "../Actions/User";
+import Dummy from "../Resources/dummy.jpeg";
+import { Loader } from "./Loader";
 
 export const LoginCredentials = ({ value }) => {
   const dispatch = useDispatch();
@@ -11,20 +13,42 @@ export const LoginCredentials = ({ value }) => {
   const [password, setpassword] = useState("");
   const [name, setname] = useState("");
   const [show, setshow] = useState(false);
+  const [image, setimage] = useState(Dummy);
+  const [add, setadd] = useState(false);
   const navigate = useNavigate();
+  const { loading } = useSelector((state) => state.User);
 
   const handlesubmit = async () => {
     if (!name && email && password) {
       await dispatch(login(email, password));
       navigate("/chat");
     } else if (name && email && password) {
-      await dispatch(register(name, email, password));
+      await dispatch(register(name, email, password, image));
       navigate("/chat");
     }
   };
+
+  const handleavatar = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      setimage(reader.result);
+      setadd(true);
+    };
+  };
   return (
     <Main>
-      <Title>Sign in</Title>
+      <Title>
+        <span>Sign In</span>
+        <label style={{ display: !value ? "none" : "flex" }}>
+          <input type="file" onChange={handleavatar} />
+          <span className="avatar">
+            <img src={image} alt="" />
+            {!add ? <span> Add your avatar</span> : <></>}
+          </span>
+        </label>
+      </Title>
       <UserDetails>
         <Input style={{ display: value ? "flex" : "none" }}>
           <input
@@ -67,7 +91,9 @@ export const LoginCredentials = ({ value }) => {
           )}
         </Input>
       </UserDetails>
-      <Submit onClick={handlesubmit}>Sign in</Submit>
+      <Submit onClick={handlesubmit}>
+        {loading ? <Loader /> : <span>Sign In</span>}
+      </Submit>
     </Main>
   );
 };
@@ -107,6 +133,32 @@ const Title = styled.div`
   text-align: center;
   font-weight: bold;
   text-align: start;
+  width: 25vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: small;
+    font-weight: 400;
+    position: relative;
+    cursor: pointer;
+    svg {
+      position: absolute;
+      font-size: x-large;
+      top: 25%;
+    }
+  }
+  input {
+    display: none;
+  }
+  img {
+    height: 10vh;
+    width: 10vh;
+    border-radius: 50%;
+  }
 `;
 
 const Input = styled.div`
@@ -130,6 +182,8 @@ const Input = styled.div`
     border: none;
     font-family: "Poppins", Arial, sans-serif;
     border: none;
+    display: flex;
+    align-items: center;
     &::placeholder {
       color: #000000;
     }
@@ -145,7 +199,7 @@ const Input = styled.div`
   svg {
     font-size: x-large;
     position: absolute;
-    top: 35%;
+    top: 30%;
     left: 85%;
     cursor: pointer;
     @media screen and (max-width: 1000px) {
@@ -172,6 +226,9 @@ const Submit = styled.button`
   border: none;
   margin-top: 2vh;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* align-self: center; */
   font-family: "Poppins", Arial, sans-serif;
   background-color: #4461f2;

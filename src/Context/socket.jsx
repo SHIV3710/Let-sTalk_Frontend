@@ -14,6 +14,7 @@ export const SocketContextProvider = ({ children }) => {
   const [socket, setsocket] = useState(null);
   const dispatch = useDispatch();
   const { user, auth } = useSelector((state) => state.User);
+  const { groups } = useSelector((state) => state.AllUser);
 
   useEffect(() => {
     if (auth) {
@@ -23,6 +24,14 @@ export const SocketContextProvider = ({ children }) => {
         },
       });
       setsocket(socket);
+
+      groups.forEach((element) => {
+        socket.on("allgroup", {
+          query: {
+            groupId: element._id,
+          },
+        });
+      });
 
       socket.on("getonlineusers", (users) => {
         dispatch(setonlineusers(users));

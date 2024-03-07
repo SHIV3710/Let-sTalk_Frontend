@@ -1,46 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { chatwith } from "../Store/Actions_Reducers/User";
-import { GoDotFill } from "react-icons/go";
-import "react-loading-skeleton/dist/skeleton.css";
+import { useSelector } from "react-redux";
 
-export const User = ({ user }) => {
-  const dispatch = useDispatch();
+export const AddGroupUser = ({ user, map, setmap }) => {
+  const [check, setcheck] = useState(false);
   const { mode } = useSelector((state) => state.mode);
-  const { user: chatuser } = useSelector((state) => state.chatwith);
-  const { onlineusers } = useSelector((state) => state.Socket);
-  return (
-    <Main
-      onClick={() => dispatch(chatwith(user))}
-      style={{
-        background:
-          chatuser && chatuser._id === user._id
-            ? !mode
-              ? "#e5e3e3"
-              : "rgb(103,133,255)"
-            : mode
-            ? "rgb(48,51,70)"
-            : "white",
-        color: !mode ? "black" : "white",
-      }}
-    >
-      <img src={user.avatar.url} alt="Image" />
 
+  useEffect(() => {
+    if (check) {
+      setmap((prevMap) => new Map(prevMap).set(user._id, user.name));
+    } else {
+      setmap((prevMap) => {
+        const newMap = new Map(prevMap);
+        newMap.delete(user._id);
+        return newMap;
+      });
+    }
+  }, [check, user._id, user.name, setmap]);
+
+  return (
+    <Main style={{ color: !mode ? "black" : "white" }}>
+      <img src={user.avatar.url} alt="Image" />
       <Detail>
         <span className="user">{user.name}</span>
-        {onlineusers.includes(user._id) ? (
-          <div>
-            <GoDotFill style={{ color: "rgba(37, 213, 111, 0.8)" }} />
-            online
-          </div>
-        ) : (
-          <div>
-            <GoDotFill />
-            offline
-          </div>
-        )}
       </Detail>
+      <input
+        type="checkbox"
+        checked={check}
+        onChange={() => setcheck(!check)}
+      />
     </Main>
   );
 };
@@ -69,9 +57,14 @@ const Main = styled.div`
     border-radius: 50%;
     object-fit: cover;
   }
+  input {
+    height: 5rem;
+    cursor: pointer;
+  }
 `;
+
 const Detail = styled.div`
-  width: 12vw;
+  width: 10vw;
   height: 10vh;
   display: flex;
   flex-direction: column;

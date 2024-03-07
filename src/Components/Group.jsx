@@ -1,18 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { chatwith } from "../Store/Actions_Reducers/User";
-import { GoDotFill } from "react-icons/go";
-import "react-loading-skeleton/dist/skeleton.css";
-
-export const User = ({ user }) => {
+import { grouptalk } from "../Store/Actions_Reducers/User";
+export const Group = ({ user }) => {
   const dispatch = useDispatch();
   const { mode } = useSelector((state) => state.mode);
-  const { user: chatuser } = useSelector((state) => state.chatwith);
-  const { onlineusers } = useSelector((state) => state.Socket);
+  const { group: chatuser } = useSelector((state) => state.chatwith);
   return (
     <Main
-      onClick={() => dispatch(chatwith(user))}
+      onClick={() => dispatch(grouptalk(user))}
       style={{
         background:
           chatuser && chatuser._id === user._id
@@ -26,27 +22,14 @@ export const User = ({ user }) => {
       }}
     >
       <img src={user.avatar.url} alt="Image" />
-
       <Detail>
-        <span className="user">{user.name}</span>
-        {onlineusers.includes(user._id) ? (
-          <div>
-            <GoDotFill style={{ color: "rgba(37, 213, 111, 0.8)" }} />
-            online
-          </div>
-        ) : (
-          <div>
-            <GoDotFill />
-            offline
-          </div>
-        )}
+        <span className="user">{user.Name}</span>
       </Detail>
     </Main>
   );
 };
 
 const Main = styled.div`
-  -webkit-transition: -webkit-transform 100s linear;
   height: 8vh;
   width: 18vw;
   display: flex;
@@ -70,6 +53,7 @@ const Main = styled.div`
     object-fit: cover;
   }
 `;
+
 const Detail = styled.div`
   width: 12vw;
   height: 10vh;
@@ -90,6 +74,6 @@ const Detail = styled.div`
     gap: 0.3vw;
   }
   @media screen and (max-width: 1000px) {
-    width: 60vw;
+    width: 80vw;
   }
 `;

@@ -3,13 +3,17 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./Store/store.js";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "./index.css";
 import { SocketContext, SocketContextProvider } from "./Context/socket.jsx";
+import "react-loading-skeleton/dist/skeleton.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <SocketContextProvider>
-      <App />
-    </SocketContextProvider>
-  </Provider>
+  <SkeletonTheme>
+    <Provider store={store}>
+      <SocketContextProvider>
+        <App />
+      </SocketContextProvider>
+    </Provider>
+  </SkeletonTheme>
 );

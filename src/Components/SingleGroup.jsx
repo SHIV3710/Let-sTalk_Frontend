@@ -5,12 +5,12 @@ import { SocketContext } from "../Context/socket";
 import { ChatBox } from "./ChatBox";
 import { Message } from "./Message";
 import { ChatTitle } from "./ChatTitle";
-import { EmptyChat } from "./EmptyChat";
+import { GroupTitle } from "./GroupTitle";
 
-export const SingleChat = () => {
+export const Singlegroup = () => {
   const dispatch = useDispatch();
   const { mode } = useSelector((state) => state.mode);
-  const { user } = useSelector((state) => state.chatwith);
+  const { group } = useSelector((state) => state.chatwith);
   const { user: onlineuser } = useSelector((state) => state.User);
   const { width } = useSelector((state) => state.Dimension);
   const { socket } = useContext(SocketContext);
@@ -19,29 +19,19 @@ export const SingleChat = () => {
     <Main
       style={{
         color: mode ? "white" : "rgba(47, 47, 50, 1)",
+        position: width > 1000 ? "relative" : "absolute",
         width: width > 1000 ? "80vw" : "80vw",
-        display: user ? "flex" : "none",
-        // background: "black",
-        zIndex: 999,
+        display: group ? "flex" : "none",
       }}
     >
-      {user ? (
+      {group ? (
         <>
-          <ChatTitle />
-          {user ? <ChatBox /> : <EmptyChat />}
+          <GroupTitle />
+          <ChatBox />
           <Message />
         </>
       ) : (
-        <>
-          <span
-            style={{
-              color: mode ? "white" : "rgba(47, 47, 50, 1)",
-            }}
-          >
-            <p>Hey {onlineuser.name}</p>
-            <p>Select a chat to start conversation</p>
-          </span>
-        </>
+        <></>
       )}
     </Main>
   );
@@ -52,13 +42,12 @@ const Main = styled.div`
   user-select: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 
   @media screen and (max-width: 1000px) {
-    width: 80vw;
+    width: 100vw;
     height: 100vh;
-    /* z-index: 999; */
   }
 
   > span {

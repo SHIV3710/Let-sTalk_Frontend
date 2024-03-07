@@ -1,34 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Inv_Chat } from "./Inv_Chat";
 
 export const ChatBox = () => {
-  const { mode } = useSelector((state) => state.mode);
   const { conversations } = useSelector((state) => state.Conversation);
   const { user } = useSelector((state) => state.chatwith);
+  const { groups, value } = useSelector((state) => state.AllUser);
+  const { user: loginuser } = useSelector((state) => state.User);
   return (
-    <Main
-      style={{
-        background: mode ? "#434347" : "rgba(242, 240, 240, 0.8)",
-        color: mode ? "white" : "rgba(47, 47, 50, 1)",
-      }}
-    >
-      {user ? (
+    <Main>
+      {value ? (
         <>
-          {conversations &&
-            conversations.map((item, index) => {
-              return (
-                <Inv_Chat
-                  key={index}
-                  idx={user._id === item.senderId ? 1 : 0}
-                  data={item}
-                />
-              );
-            })}
+          {user ? (
+            <>
+              {conversations &&
+                conversations.map((item, index) => {
+                  return (
+                    <Inv_Chat
+                      key={index}
+                      idx={user._id === item.senderId._id ? 1 : 0}
+                      data={item}
+                    />
+                  );
+                })}
+            </>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
-        <></>
+        <>
+          {groups ? (
+            <>
+              {conversations &&
+                conversations.map((item, index) => {
+                  return (
+                    <Inv_Chat
+                      key={index}
+                      idx={item.senderId._id !== loginuser._id ? 1 : 0}
+                      data={item}
+                    />
+                  );
+                })}
+            </>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </Main>
   );
@@ -36,7 +55,7 @@ export const ChatBox = () => {
 
 const Main = styled.div`
   height: 76vh;
-  width: 78vw;
+  width: 70vw;
   display: flex;
   flex-direction: column;
   gap: 1vh;
@@ -46,7 +65,7 @@ const Main = styled.div`
   }
   padding: 2vh 1vw;
   @media screen and (max-width: 1000px) {
-    width: 98vw;
+    width: 70vw;
     height: 80vh;
   }
 `;

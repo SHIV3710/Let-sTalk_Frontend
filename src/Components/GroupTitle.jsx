@@ -2,34 +2,46 @@ import React, { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FaArrowLeft } from "react-icons/fa6";
-import { chatwith } from "../Store/Actions_Reducers/User";
-import { getconversation } from "../Actions/Chat";
+import { grouptalk } from "../Store/Actions_Reducers/User";
+import { getallconv_group } from "../Actions/Chat";
 import { SocketContext } from "../Context/socket";
 import { io } from "socket.io-client";
-import { addmessagetoconv } from "../Store/Actions_Reducers/Chat";
+import { addmessagetoconv, currconv } from "../Store/Actions_Reducers/Chat";
 
-export const ChatTitle = () => {
+export const GroupTitle = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.chatwith);
+  const { group } = useSelector((state) => state.chatwith);
   const { socket } = useContext(SocketContext);
   const handleback = () => {
-    dispatch(chatwith(null));
+    dispatch(grouptalk(null));
+    dispatch(currconv(null));
   };
   useEffect(() => {
-    if (user) {
-      dispatch(getconversation(user._id));
-      socket?.on("newmessage", (newMessage) => {
-        dispatch(addmessagetoconv(newMessage));
+    if (group) {
+      dispatch(getallconv_group(group._id));
+      socket?.on("newmessagetogroup", ({ message, id }) => {
+        if (id === group._id) dispatch(addmessagetoconv(message));
       });
-      return () => socket?.off("newmessage");
+      return () => socket?.off("newmessagetogroup");
     }
-  }, [user, io]);
+  }, [group, io]);
   return (
     <Main>
       <FaArrowLeft onClick={handleback} />
-      <img src={user.avatar.url} alt="Image" />
+      <img src={group.avatar.url} alt="Image" />
       <div>
-        <span className="user">{user.name}</span>
+        <span className="user">{group.Name}</span>
+        <span className="status">
+          {group.participants ? (
+            <>
+              {group.participants.map((item, index) => {
+                return <span key={index}> {item.name},</span>;
+              })}
+            </>
+          ) : (
+            <></>
+          )}
+        </span>
       </div>
     </Main>
   );

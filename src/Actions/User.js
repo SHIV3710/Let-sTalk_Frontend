@@ -2,6 +2,8 @@ import axios from "axios";
 import {
   getalluser,
   getallusererror,
+  getuserloading,
+  loadinguser,
   loginuser,
   loginuserError,
   logoutuser,
@@ -9,8 +11,9 @@ import {
 
 export const login = (email, password) => async (dispatch) => {
   try {
+    dispatch(loadinguser());
     const { data } = await axios.post(
-      "https://chatapp-backend-gtje.onrender.com/chat/login",
+      `https://chatapp-backend-gtje.onrender.com/chat/login`,
       {
         email,
         password,
@@ -28,7 +31,7 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-export const register = (name, email, password) => async (dispatch) => {
+export const register = (name, email, password, image) => async (dispatch) => {
   try {
     const { data } = await axios.post(
       "https://chatapp-backend-gtje.onrender.com/chat/register",
@@ -36,6 +39,7 @@ export const register = (name, email, password) => async (dispatch) => {
         name,
         email,
         password,
+        image,
       },
       {
         headers: {
@@ -43,9 +47,8 @@ export const register = (name, email, password) => async (dispatch) => {
         },
       }
     );
-    console.log(data);
     localStorage.setItem("token", data.token);
-    dispatch(loginuser(data));
+    dispatch(loginuser(data.user));
   } catch (error) {
     dispatch(loginuserError(error.message));
   }
@@ -60,8 +63,9 @@ export const logout = () => async (dispatch) => {
   }
 };
 
-export const alluser = () => async (dispatch) => {
+export const alluser = (key) => async (dispatch) => {
   try {
+    dispatch(getuserloading());
     const { data } = await axios.get(
       "https://chatapp-backend-gtje.onrender.com/chat/allusers",
       {
@@ -70,7 +74,10 @@ export const alluser = () => async (dispatch) => {
         },
       }
     );
-    dispatch(getalluser(data.users));
+    const searched = data.users.filter((item) => {
+      return item.name.toLowerCase().includes(key.toLowerCase());
+    });
+    dispatch(getalluser(searched));
   } catch (error) {
     dispatch(getallusererror(error.message));
   }
@@ -78,6 +85,7 @@ export const alluser = () => async (dispatch) => {
 
 export const specificuser = () => async (dispatch) => {
   try {
+    dispatch(loadinguser());
     const { data } = await axios.get(
       "https://chatapp-backend-gtje.onrender.com/chat/user",
       {
@@ -86,6 +94,7 @@ export const specificuser = () => async (dispatch) => {
         },
       }
     );
+
     dispatch(loginuser(data.user));
   } catch (error) {
     dispatch(loginuserError(error.message));
