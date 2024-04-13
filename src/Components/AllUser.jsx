@@ -1,17 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import { User } from "./User";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Group } from "./Group";
 import { LoadingUser } from "./LoadingUser";
+import { currconv } from "../Store/Actions_Reducers/Chat";
 
 export const AllUser = () => {
+  const dispatch = useDispatch();
   const { users, value, groups, grouploading } = useSelector(
     (state) => state.AllUser
   );
   const { user } = useSelector((state) => state.User);
   return (
-    <Main>
+    <Main onClick={() => dispatch(currconv(""))}>
       {value ? (
         <>
           <>

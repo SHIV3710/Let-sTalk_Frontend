@@ -29,33 +29,28 @@ export const getconversation = (id) => async (dispatch) => {
     );
     dispatch(currconv(data.messages));
   } catch (error) {
-    dispatch(currconverror(error.message));
+    dispatch(currconverror(error.response.data.message));
   }
 };
 
-export const sendmessage = (id, message) => async (dispatch) => {
-  const token = localStorage.getItem("token");
+export const sendmessage = (id, message, media, type) => async (dispatch) => {
   try {
     const { data } = await axios.put(
       `https://chatapp-backend-gtje.onrender.com/talk/message/${id}`,
       {
         message,
+        media,
+        type,
       },
       {
         params: {
           token: localStorage.getItem("token"),
         },
-      },
-      {
-        headers: {
-          token: token,
-          "Content-Type": "application/json",
-        },
       }
     );
     dispatch(addmessagetoconv(data.newMessage));
   } catch (error) {
-    dispatch(currconverror(error.message));
+    dispatch(currconverror(error.response.data.message));
   }
 };
 
@@ -74,12 +69,13 @@ export const getgroups = (key) => async (dispatch) => {
     });
     dispatch(getallgroups(searched));
   } catch (error) {
-    dispatch(getallusererror());
+    dispatch(getallusererror(error.response.data.message));
   }
 };
 
 export const creategroup = (users, Name, avatar) => async (dispatch) => {
   try {
+    console.log(avatar);
     dispatch(creategrouploading());
     const { data } = await axios.post(
       `https://chatapp-backend-gtje.onrender.com/talk/group/add`,
@@ -101,33 +97,38 @@ export const creategroup = (users, Name, avatar) => async (dispatch) => {
     );
     dispatch(changevalue(0));
   } catch (error) {
-    dispatch(creategroupfailure());
+    dispatch(creategroupfailure(error.response.data.message));
   }
 };
 
-export const sendmessage_group = (id, message) => async (dispatch) => {
-  try {
-    const { data } = await axios.put(
-      `https://chatapp-backend-gtje.onrender.com/talk/group/message/${id}`,
-      {
-        message,
-      },
-      {
-        params: {
-          token: localStorage.getItem("token"),
+export const sendmessage_group =
+  (id, message, media, type) => async (dispatch) => {
+    console.log(message, media, type);
+    try {
+      const { data } = await axios.put(
+        `https://chatapp-backend-gtje.onrender.com/talk/group/message/${id}`,
+        {
+          message,
+          media,
+          type,
         },
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+        {
+          params: {
+            token: localStorage.getItem("token"),
+          },
         },
-      }
-    );
-    dispatch(currconv(data.group.messages));
-  } catch (error) {
-    dispatch(currconverror(error.message));
-  }
-};
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch(currconv(data.group.messages));
+    } catch (error) {
+      console.log(error);
+      dispatch(currconverror(error.response.data.message));
+    }
+  };
 
 export const getallconv_group = (id) => async (dispatch) => {
   try {
@@ -146,6 +147,6 @@ export const getallconv_group = (id) => async (dispatch) => {
     );
     dispatch(currconv(data.group.messages));
   } catch (error) {
-    dispatch(currconverror(error.message));
+    dispatch(currconverror(error.response.data.message));
   }
 };

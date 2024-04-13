@@ -163,5 +163,6 @@ export const {
   creategroup,
   creategroupfailure,
   creategrouploading,
+  clearerroralluser,
 } = alluser.actions;
 export const AllUser = alluser.reducer;

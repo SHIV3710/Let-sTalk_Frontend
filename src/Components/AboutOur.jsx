@@ -44,8 +44,8 @@ const Main = styled.div`
     }
   }
   @media screen and (max-width: 1000px) {
-    height: 40vh;
+    height: 30vh;
     width: 100vw;
-    font-size: large;
+    font-size: small;
   }
 `;

@@ -15,3 +15,7 @@ h6 {
 html {
   scroll-behavior: smooth;
 }
+
+.toast-message {
+  font-family: Poppins, sans-serif;
+}

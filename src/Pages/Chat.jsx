@@ -2,22 +2,22 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { AllUser } from "../Components/AllUser";
 import { SingleChat } from "../Components/SingleChat";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changedimension,
-  chatwithloading,
+  clearerror,
+  clearerroralluser,
 } from "../Store/Actions_Reducers/User";
 import { Title } from "../Components/Title";
 import { Search } from "../Components/Search";
 import { Options_mode_logout } from "../Components/Options_mode_logout";
 import { Singlegroup } from "../Components/SingleGroup";
-import { LoadingUser } from "../Components/LoadingUser";
-import { SingleChat_Group_Loader } from "../Components/SingleChat_Group_Loader";
 import { CreateaGroup } from "../Components/CreateaGroup";
 import { EmptyChat } from "../Components/EmptyChat";
 import { ToastContainer } from "react-toastify";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { clearchaterror } from "../Store/Actions_Reducers/Chat";
 
 export const Chat = () => {
   const dispatch = useDispatch();
@@ -25,7 +25,25 @@ export const Chat = () => {
   const { width } = useSelector((state) => state.Dimension);
   const { value, create } = useSelector((state) => state.AllUser);
   const { user, group } = useSelector((state) => state.chatwith);
-  const { loading } = useSelector((state) => state.User);
+  const { auth, error } = useSelector((state) => state.User);
+  const { error: allusererror } = useSelector((state) => state.AllUser);
+  const { error: conversationerror } = useSelector(
+    (state) => state.Conversation
+  );
+
+  const erroralert = (errormessage) => {
+    toast.error(errormessage, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: mode ? "light" : "dark",
+      className: "toast-message",
+    });
+  };
 
   const handlewidth = () =>
     dispatch(
@@ -36,6 +54,21 @@ export const Chat = () => {
     window.addEventListener("resize", handlewidth);
     return () => window.removeEventListener("resize", handlewidth);
   }, [width]);
+
+  useEffect(() => {
+    if (error) {
+      erroralert(error);
+      dispatch(clearerror(error));
+    }
+    if (conversationerror) {
+      erroralert(conversationerror);
+      dispatch(clearchaterror());
+    }
+    if (allusererror) {
+      erroralert(allusererror);
+      dispatch(clearerroralluser());
+    }
+  }, [error, conversationerror, allusererror]);
 
   return (
     <Main style={{ background: mode ? "rgb(103,133,255)" : "rgb(48,51,70) " }}>

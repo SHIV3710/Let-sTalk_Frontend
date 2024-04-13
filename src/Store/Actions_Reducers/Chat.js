@@ -18,11 +18,9 @@ const sendmessage = createSlice({
     },
     currconverror: (state, action) => {
       state.error = action.payload;
-      state.conversations = [];
     },
     clearchaterror: (state, action) => {
       state.error = null;
-      state.conversations = [];
     },
   },
 });

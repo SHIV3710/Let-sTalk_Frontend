@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Inv_Chat } from "./Inv_Chat";
@@ -8,8 +8,17 @@ export const ChatBox = () => {
   const { user } = useSelector((state) => state.chatwith);
   const { groups, value } = useSelector((state) => state.AllUser);
   const { user: loginuser } = useSelector((state) => state.User);
+  const scrollableDivRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollableDivRef.current) {
+      scrollableDivRef.current.scrollTop =
+        scrollableDivRef.current.scrollHeight;
+    }
+  });
+
   return (
-    <Main>
+    <Main ref={scrollableDivRef}>
       {value ? (
         <>
           {user ? (
@@ -60,12 +69,24 @@ const Main = styled.div`
   flex-direction: column;
   gap: 1vh;
   overflow-y: scroll;
+  position: relative;
   &::-webkit-scrollbar {
     display: none;
   }
   padding: 2vh 1vw;
+  background: url("https://theabbie.github.io/blog/assets/official-whatsapp-background-image.jpg");
+
   @media screen and (max-width: 1000px) {
     width: 70vw;
     height: 80vh;
+  }
+
+  .image-expand {
+    position: absolute;
+    height: 70vh;
+    width: 70vh;
+    top: 5%;
+    left: 20%;
+    border-radius: 0.5rem;
   }
 `;

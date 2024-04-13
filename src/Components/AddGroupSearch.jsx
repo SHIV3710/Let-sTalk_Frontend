@@ -16,7 +16,7 @@ export const AddGroupSearch = ({ map, avatar }) => {
     for (let [key] of map) {
       users.push(key);
     }
-    if (users.length > 0) {
+    if (users.length > 0 && avatar) {
       await dispatch(creategroup(users, search, avatar));
       dispatch(getgroups(""));
     }

@@ -5,13 +5,17 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Dummy from "../Resources/dummy.jpeg";
 
 export const AddGroupAvatar = ({ avatar, setavatar }) => {
-  const [image, setimage] = useState(avatar || Dummy);
+  const [image, setimage] = useState(
+    avatar ||
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdhTe0NI3X5BIZyVoNAwxCXTCLfK1m1uR2pglBPBhqQg&s"
+  );
   const { mode } = useSelector((state) => state.mode);
   const handleavatar = async (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
       setimage(reader.result);
+      setavatar(reader.result);
     };
   };
   return (

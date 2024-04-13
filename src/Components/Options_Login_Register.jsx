@@ -51,12 +51,14 @@ const Main = styled.div`
     box-shadow: rgba(94, 94, 219, 0.25) 0px 13px 27px -5px,
       rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     cursor: pointer;
+
     @media screen and (max-width: 1000px) {
       width: 25vw;
+      font-size: x-small;
     }
   }
   @media screen and (max-width: 1000px) {
-    gap: 1vw;
-    width: 30vw;
+    gap: 4vw;
+    width: 40vw;
   }
 `;

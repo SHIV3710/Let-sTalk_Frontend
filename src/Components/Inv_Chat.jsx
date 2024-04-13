@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { Player } from "video-react";
 
-export const Inv_Chat = ({ idx, data }) => {
+export const Inv_Chat = ({ idx, data, setimage }) => {
   const createdAtDate = new Date(data.createdAt);
   const { mode } = useSelector((state) => state.mode);
   const { user: loginuser } = useSelector((state) => state.User);
@@ -33,27 +34,93 @@ export const Inv_Chat = ({ idx, data }) => {
           className="time"
           style={{ flexDirection: idx % 2 == 0 ? "row-reverse" : "row" }}
         >
-          <span>{data.senderId.name}</span>{" "}
-          <span style={{ fontSize: "7px" }}>
+          <span style={{ fontWeight: "500" }}>{data.senderId.name}</span>{" "}
+          <span style={{ fontSize: "8px" }}>
             {displayHours}:{minutes} {amOrPm}
           </span>
         </span>
-        <span
-          className="message"
-          style={{
-            background:
-              idx % 2 == 0
-                ? mode
-                  ? "rgb(103,133,255)"
-                  : "#dedada  "
-                : mode
-                ? "#4E4E4E "
-                : "rgb(103,133,255)  ",
-            color: idx % 2 == 0 ? "r#ffffff" : "rgb(255, 255, 255)",
-          }}
-        >
-          {data.message}
-        </span>
+        <div className="actual-message">
+          {data.message ? (
+            <>
+              <span
+                className="message"
+                style={{
+                  background:
+                    idx % 2 == 0
+                      ? mode
+                        ? "rgb(103,133,255)"
+                        : "linear-gradient(to right, #6a3093, #a044ff)"
+                      : mode
+                      ? "#4E4E4E "
+                      : "rgb(103,133,255)  ",
+                  color: idx % 2 == 0 ? "#ffffff" : "rgb(255, 255, 255)",
+                }}
+              >
+                {data.message}
+              </span>
+            </>
+          ) : (
+            <>
+              {data.media.Type === "image" && (
+                <img
+                  src={data.media.url}
+                  alt=""
+                  className="mediaimage"
+                  style={{
+                    background:
+                      idx % 2 === 0
+                        ? mode
+                          ? "rgb(103,133,255)"
+                          : "linear-gradient(to right, #6a3093, #a044ff)  "
+                        : mode
+                        ? "#4E4E4E "
+                        : "rgb(103,133,255)  ",
+                    color: idx % 2 === 0 ? "#ffffff" : "rgb(255, 255, 255)",
+                  }}
+                />
+              )}
+
+              {data.media.Type === "video" && (
+                <video
+                  src={data.media.url}
+                  controls
+                  className="mediavideo"
+                  style={{
+                    background:
+                      idx % 2 === 0
+                        ? mode
+                          ? "rgb(103,133,255)"
+                          : "linear-gradient(to right, #6a3093, #a044ff)  "
+                        : mode
+                        ? "#4E4E4E "
+                        : "rgb(103,133,255)  ",
+                    color: idx % 2 === 0 ? "#ffffff" : "rgb(255, 255, 255)",
+                    height: "20vh",
+                  }}
+                />
+              )}
+
+              {data.media.Type === "audio" && (
+                <audio
+                  src={data.media.url}
+                  controls
+                  className="mediaaudio"
+                  style={{
+                    background:
+                      idx % 2 === 0
+                        ? mode
+                          ? "rgb(103,133,255)"
+                          : "linear-gradient(to right, #6a3093, #a044ff)  "
+                        : mode
+                        ? "#4E4E4E "
+                        : "rgb(103,133,255)  ",
+                    color: idx % 2 === 0 ? "#ffffff" : "rgb(255, 255, 255)",
+                  }}
+                />
+              )}
+            </>
+          )}
+        </div>
       </Message>
     </Main>
   );
@@ -89,14 +156,14 @@ const Message = styled.div`
   }
 
   .message {
-    font-size: 12px;
+    font-size: 13px;
     background-color: rgb(50, 50, 50);
     min-height: 3vh;
     min-width: 3vw;
     align-self: flex-end;
     padding: 1vh;
     width: fit-content;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -106,5 +173,10 @@ const Message = styled.div`
       min-width: 5vw;
       font-size: 8px;
     }
+  }
+  .mediaimage {
+    height: 30vh;
+    padding: 0.1rem;
+    border-radius: 0.2rem;
   }
 `;

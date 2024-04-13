@@ -11,17 +11,23 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const App = () => {
   const dispatch = useDispatch();
-  const { auth } = useSelector((state) => state.User);
-  const notify = () => {
-    toast.success("Welcome to Let's Talk", {
+  const { auth, error } = useSelector((state) => state.User);
+  const { error: allusererror } = useSelector((state) => state.AllUser);
+  const { error: conversationerror } = useSelector(
+    (state) => state.Conversation
+  );
+  const { mode } = useSelector((state) => state.mode);
+  const notify = (message) => {
+    toast.success(message, {
       position: "top-center",
       autoClose: 2000,
-      hideProgressBar: true,
+      hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "dark",
+      theme: mode ? "light" : "dark",
+      className: "toast-message",
     });
   };
 
@@ -34,14 +40,15 @@ export const App = () => {
     dispatch(specificuser());
     if (auth) handleallitem();
     if (auth == true) {
-      notify();
+      notify(`Welcome to Let's Talk`);
     }
   }, [auth]);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={auth === true ? <Chat /> : <Login />} />
+        <Route path="/" element={<Login />} />
+        // <Route path="/" element={auth === true ? <Chat /> : <Login />} />
         <Route path="/chat" element={auth === true ? <Chat /> : <Login />} />
         <Route
           path="/register"

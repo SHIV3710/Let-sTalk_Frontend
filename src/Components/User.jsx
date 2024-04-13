@@ -17,11 +17,11 @@ export const User = ({ user }) => {
         background:
           chatuser && chatuser._id === user._id
             ? !mode
-              ? "#e5e3e3"
+              ? "#aaa8a8"
               : "rgb(103,133,255)"
             : mode
             ? "rgb(48,51,70)"
-            : "white",
+            : "#e5e3e3",
         color: !mode ? "black" : "white",
       }}
     >

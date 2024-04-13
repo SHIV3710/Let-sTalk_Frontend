@@ -109,6 +109,7 @@ export const Options_mode_logout = () => {
               color: "white",
             }}
           ></span>
+          New Group
         </span>
         <span>
           {!mode ? (

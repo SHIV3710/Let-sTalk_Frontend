@@ -8,7 +8,9 @@ import Dummy from "../Resources/dummy.jpeg";
 
 export const CreateaGroup = () => {
   const [map, setmap] = useState(new Map());
-  const [avatar, setavatar] = useState(Dummy);
+  const [avatar, setavatar] = useState(
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdhTe0NI3X5BIZyVoNAwxCXTCLfK1m1uR2pglBPBhqQg&s"
+  );
   return (
     <Main>
       <Title />

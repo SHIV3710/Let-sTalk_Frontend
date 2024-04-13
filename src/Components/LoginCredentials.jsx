@@ -13,7 +13,9 @@ export const LoginCredentials = ({ value }) => {
   const [password, setpassword] = useState("");
   const [name, setname] = useState("");
   const [show, setshow] = useState(false);
-  const [image, setimage] = useState(Dummy);
+  const [image, setimage] = useState(
+    "https://www.ihna.edu.au/blog/wp-content/uploads/2022/10/user-dummy.png"
+  );
   const [add, setadd] = useState(false);
   const navigate = useNavigate();
   const { loading } = useSelector((state) => state.User);
@@ -91,6 +93,7 @@ export const LoginCredentials = ({ value }) => {
           )}
         </Input>
       </UserDetails>
+
       <Submit onClick={handlesubmit}>
         {loading ? <Loader /> : <span>Sign In</span>}
       </Submit>
@@ -137,11 +140,14 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media screen and (max-width: 1000px) {
+    width: 60vw;
+  }
   .avatar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: small;
+    font-size: x-small;
     font-weight: 400;
     position: relative;
     cursor: pointer;
@@ -153,11 +159,16 @@ const Title = styled.div`
   }
   input {
     display: none;
+    width: fit-content;
   }
   img {
     height: 10vh;
     width: 10vh;
     border-radius: 50%;
+    @media screen and (max-width: 1000px) {
+      height: 40px;
+      width: 40px;
+    }
   }
 `;
 
@@ -193,7 +204,8 @@ const Input = styled.div`
     @media screen and (max-width: 1000px) {
       width: 60vw;
       height: 6vh;
-      font-size: medium;
+      font-size: small;
+      text-indent: 4px;
     }
   }
   svg {
@@ -203,7 +215,7 @@ const Input = styled.div`
     left: 85%;
     cursor: pointer;
     @media screen and (max-width: 1000px) {
-      top: 40%;
+      top: 20%;
       left: 90%;
     }
     @media screen and (max-width: 600px) {
@@ -229,7 +241,6 @@ const Submit = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* align-self: center; */
   font-family: "Poppins", Arial, sans-serif;
   background-color: #4461f2;
   color: white;
@@ -237,6 +248,6 @@ const Submit = styled.button`
     width: 25vw;
     height: 5vh;
     border-radius: 0.2rem;
-    font-size: large;
+    font-size: small;
   }
 `;
