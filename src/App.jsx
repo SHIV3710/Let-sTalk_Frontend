@@ -47,7 +47,7 @@ export const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={auth === true ? <Chat /> : <Login />} />
         // <Route path="/" element={auth === true ? <Chat /> : <Login />} />
         <Route path="/chat" element={auth === true ? <Chat /> : <Login />} />
         <Route

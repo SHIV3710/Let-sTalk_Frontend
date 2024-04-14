@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { chatwith } from "../Store/Actions_Reducers/User";
 import { GoDotFill } from "react-icons/go";
 import "react-loading-skeleton/dist/skeleton.css";
+import { currconv } from "../Store/Actions_Reducers/Chat";
 
 export const User = ({ user }) => {
   const dispatch = useDispatch();
@@ -12,7 +13,12 @@ export const User = ({ user }) => {
   const { onlineusers } = useSelector((state) => state.Socket);
   return (
     <Main
-      onClick={() => dispatch(chatwith(user))}
+      onClick={() => {
+        if (!chatuser || chatuser._id != user._id) {
+          dispatch(currconv(""));
+          dispatch(chatwith(user));
+        }
+      }}
       style={{
         background:
           chatuser && chatuser._id === user._id

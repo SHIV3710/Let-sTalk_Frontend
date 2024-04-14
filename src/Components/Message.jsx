@@ -34,9 +34,11 @@ export const Message = () => {
         setcurrchat("");
       }
     } else {
-      dispatch(sendmessage_group(group._id, currchar, currmedia, "image"));
-      setcurrchat("");
-      dispatch(getallconv_group(group._id));
+      if (currchar) {
+        dispatch(sendmessage_group(group._id, currchar, currmedia, "image"));
+        setcurrchat("");
+        dispatch(getallconv_group(group._id));
+      }
     }
   };
 
@@ -61,14 +63,16 @@ export const Message = () => {
         }
       }
     } else {
-      if (currmedia.length > 100000) {
-        dispatch(currconverror(`High Payload`));
-      } else {
-        dispatch(
-          sendmessage_group(group._id, currchar, currmedia, typeofmedia)
-        );
-        setcurrchat("");
-        dispatch(getallconv_group(group._id));
+      if (currmedia) {
+        if (currmedia.length > 100000) {
+          dispatch(currconverror(`High Payload`));
+        } else {
+          dispatch(
+            sendmessage_group(group._id, currchar, currmedia, typeofmedia)
+          );
+          setcurrchat("");
+          dispatch(getallconv_group(group._id));
+        }
       }
     }
   }, [currmedia]);
@@ -226,7 +230,7 @@ const Main = styled.div`
     gap: 1vh;
     border-radius: 0.4rem;
     height: 18vh;
-    width: 7vw;
+    width: fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -247,7 +251,8 @@ const Main = styled.div`
         align-items: center;
         gap: 0.5vw;
         padding: 0.2rem;
-        width: 6vw;
+        width: fit-content;
+        /* background-color: red; */
         border-radius: 0.5rem;
         cursor: pointer;
         &:hover {
@@ -260,6 +265,9 @@ const Main = styled.div`
           gap: 0.5vw;
         }
       }
+    }
+    @media screen and (max-width: 1000px) {
+      top: -250%;
     }
   }
 

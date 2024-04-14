@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  addmessageloading,
   addmessagetoconv,
   currconv,
   currconverror,
@@ -35,6 +36,7 @@ export const getconversation = (id) => async (dispatch) => {
 
 export const sendmessage = (id, message, media, type) => async (dispatch) => {
   try {
+    dispatch(addmessageloading());
     const { data } = await axios.put(
       `https://chatapp-backend-gtje.onrender.com/talk/message/${id}`,
       {
@@ -50,7 +52,8 @@ export const sendmessage = (id, message, media, type) => async (dispatch) => {
     );
     dispatch(addmessagetoconv(data.newMessage));
   } catch (error) {
-    dispatch(currconverror(error.response.data.message));
+    console.log(error);
+    dispatch(currconverror());
   }
 };
 
@@ -75,7 +78,6 @@ export const getgroups = (key) => async (dispatch) => {
 
 export const creategroup = (users, Name, avatar) => async (dispatch) => {
   try {
-    console.log(avatar);
     dispatch(creategrouploading());
     const { data } = await axios.post(
       `https://chatapp-backend-gtje.onrender.com/talk/group/add`,
@@ -103,8 +105,8 @@ export const creategroup = (users, Name, avatar) => async (dispatch) => {
 
 export const sendmessage_group =
   (id, message, media, type) => async (dispatch) => {
-    console.log(message, media, type);
     try {
+      dispatch(addmessageloading());
       const { data } = await axios.put(
         `https://chatapp-backend-gtje.onrender.com/talk/group/message/${id}`,
         {
@@ -125,8 +127,7 @@ export const sendmessage_group =
       );
       dispatch(currconv(data.group.messages));
     } catch (error) {
-      console.log(error);
-      dispatch(currconverror(error.response.data.message));
+      dispatch(currconverror());
     }
   };
 

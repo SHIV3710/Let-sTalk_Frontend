@@ -8,8 +8,11 @@ const sendmessage = createSlice({
     error: null,
   },
   reducers: {
-    addmessagetoconv: (state, action) => {
+    addmessageloading: (state, action) => {
       state.load = true;
+    },
+    addmessagetoconv: (state, action) => {
+      state.load = false;
       state.conversations = [...state.conversations, action.payload];
     },
     currconv: (state, action) => {
@@ -25,8 +28,13 @@ const sendmessage = createSlice({
   },
 });
 
-export const { addmessagetoconv, currconv, currconverror, clearchaterror } =
-  sendmessage.actions;
+export const {
+  addmessagetoconv,
+  currconv,
+  currconverror,
+  clearchaterror,
+  addmessageloading,
+} = sendmessage.actions;
 export const Conversation = sendmessage.reducer;
 
 const socket = createSlice({

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Player } from "video-react";
 
-export const Inv_Chat = ({ idx, data, setimage }) => {
+export const Inv_Chat = ({ idx, data, setimage, delay }) => {
   const createdAtDate = new Date(data.createdAt);
   const { mode } = useSelector((state) => state.mode);
   const { user: loginuser } = useSelector((state) => state.User);
@@ -20,6 +20,9 @@ export const Inv_Chat = ({ idx, data, setimage }) => {
       style={{
         alignSelf: idx % 2 == 0 ? "flex-end" : "flex-start",
         flexDirection: idx % 2 == 0 ? "row-reverse" : "row",
+        animation: `${
+          idx % 2 == 0 ? "slideIn" : "slideOut"
+        } ${delay}s ease-in-out`,
       }}
     >
       <Image
@@ -34,8 +37,20 @@ export const Inv_Chat = ({ idx, data, setimage }) => {
           className="time"
           style={{ flexDirection: idx % 2 == 0 ? "row-reverse" : "row" }}
         >
-          <span style={{ fontWeight: "500" }}>{data.senderId.name}</span>{" "}
-          <span style={{ fontSize: "8px" }}>
+          <span
+            style={{
+              fontWeight: "500",
+              display: "flex",
+              gap: "5px",
+            }}
+          >
+            {data.senderId.name}
+          </span>{" "}
+          <span
+            style={{
+              fontSize: "8px",
+            }}
+          >
             {displayHours}:{minutes} {amOrPm}
           </span>
         </span>
@@ -131,6 +146,27 @@ const Main = styled.div`
   height: fit-content;
   gap: 0.5vw;
   font-family: "Poppins";
+
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes slideOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
 `;
 const Image = styled.img`
   height: 5vh;
@@ -150,6 +186,9 @@ const Message = styled.div`
     align-items: center;
     gap: 0.5vw;
     font-size: 12px;
+    font-weight: bold;
+    /* z-index: 100; */
+
     @media screen and (max-width: 1000px) {
       font-size: 7px;
     }
@@ -178,5 +217,8 @@ const Message = styled.div`
     height: 30vh;
     padding: 0.1rem;
     border-radius: 0.2rem;
+    object-fit: fill;
+    display: flex;
+    align-items: center;
   }
 `;

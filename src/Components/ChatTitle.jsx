@@ -19,7 +19,9 @@ export const ChatTitle = () => {
     if (user) {
       dispatch(getconversation(user._id));
       socket?.on("newmessage", (newMessage) => {
-        dispatch(addmessagetoconv(newMessage));
+        console.log(newMessage);
+        if (newMessage && user._id == newMessage.newMessage.senderId._id)
+          dispatch(addmessagetoconv(newMessage.newMessage));
       });
       return () => socket?.off("newmessage");
     }

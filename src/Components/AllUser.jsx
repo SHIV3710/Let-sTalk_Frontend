@@ -11,9 +11,10 @@ export const AllUser = () => {
   const { users, value, groups, grouploading } = useSelector(
     (state) => state.AllUser
   );
+  const { user: chatuser } = useSelector((state) => state.chatwith);
   const { user } = useSelector((state) => state.User);
   return (
-    <Main onClick={() => dispatch(currconv(""))}>
+    <Main>
       {value ? (
         <>
           <>

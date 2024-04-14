@@ -27,7 +27,7 @@ export const Chat = () => {
   const { user, group } = useSelector((state) => state.chatwith);
   const { auth, error } = useSelector((state) => state.User);
   const { error: allusererror } = useSelector((state) => state.AllUser);
-  const { error: conversationerror } = useSelector(
+  const { error: conversationerror, load } = useSelector(
     (state) => state.Conversation
   );
 
@@ -36,6 +36,20 @@ export const Chat = () => {
       position: "top-center",
       autoClose: 2000,
       hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: mode ? "light" : "dark",
+      className: "toast-message",
+    });
+  };
+
+  const sendmessagealert = (message) => {
+    toast.loading(message, {
+      position: "top-center",
+      hideProgressBar: false,
+      autoClose: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
@@ -69,6 +83,14 @@ export const Chat = () => {
       dispatch(clearerroralluser());
     }
   }, [error, conversationerror, allusererror]);
+
+  useEffect(() => {
+    if (load) {
+      sendmessagealert(`Message Sending`);
+    } else {
+      toast.dismiss();
+    }
+  }, [load]);
 
   return (
     <Main style={{ background: mode ? "rgb(103,133,255)" : "rgb(48,51,70) " }}>

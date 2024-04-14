@@ -28,6 +28,7 @@ export const ChatBox = () => {
                   return (
                     <Inv_Chat
                       key={index}
+                      delay={0.2 * index}
                       idx={user._id === item.senderId._id ? 1 : 0}
                       data={item}
                     />
@@ -47,6 +48,7 @@ export const ChatBox = () => {
                   return (
                     <Inv_Chat
                       key={index}
+                      delay={0.2 * index}
                       idx={item.senderId._id !== loginuser._id ? 1 : 0}
                       data={item}
                     />
@@ -64,7 +66,7 @@ export const ChatBox = () => {
 
 const Main = styled.div`
   height: 76vh;
-  width: 70vw;
+  width: 72.5vw;
   display: flex;
   flex-direction: column;
   gap: 1vh;
@@ -75,6 +77,7 @@ const Main = styled.div`
   }
   padding: 2vh 1vw;
   background: url("https://theabbie.github.io/blog/assets/official-whatsapp-background-image.jpg");
+  background-size: contain;
 
   @media screen and (max-width: 1000px) {
     width: 70vw;

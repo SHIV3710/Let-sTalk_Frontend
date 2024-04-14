@@ -97,6 +97,7 @@ export const specificuser = () => async (dispatch) => {
 
     dispatch(loginuser(data.user));
   } catch (error) {
+    console.log(error);
     dispatch(loginuserError(error.response.data.message));
   }
 };
